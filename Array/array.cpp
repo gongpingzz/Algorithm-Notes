@@ -41,3 +41,44 @@ vector<int> Solution::findDiagonalOrder(vector<vector<int>>& matrix)
     }
     return res;
 }
+
+
+/**
+ * 编写一个函数来查找字符串数组中的最长公共前缀。
+ * 如果不存在公共前缀，返回空字符串 ""。
+ * 
+ * 输入: ["flower","flow","flight"]
+ * 输出: "fl"
+ * 
+ * 输入: ["dog","racecar","car"]
+ * 输出: ""
+ * 解释: 输入不存在公共前缀。
+*/
+string Solution::longestCommonPrefix(vector<string>& strs) {
+    unsigned int size = strs.size();
+    //vector为空
+    if (strs.size() <= 0)
+    {
+        return "";
+    }
+    //求出vector中最短的字符串
+    int len = strs[0].size();
+    for (auto it = strs.begin(); it != strs.end(); it++) 
+    {
+        if ((*it).size() < len)
+        {
+            len = (*it).size();
+        }
+    }
+    //求最长公共前缀
+    string res = "";
+    for (unsigned int i = 0; i < len; i++)
+    {
+        for (unsigned int j = 0; j < size-1; j++)
+        {
+            if(strs[j][i] != strs[j+1][i]) return res;
+        }
+        res.push_back(strs[0][i]);
+    }
+    return res;
+}
