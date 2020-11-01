@@ -82,3 +82,7 @@ string Solution::longestCommonPrefix(vector<string>& strs) {
     }
     return res;
 }
+
+
+
+/* 最长回文子串 */
