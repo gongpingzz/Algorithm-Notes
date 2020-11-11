@@ -28,3 +28,10 @@
 ## 3.1  中心扩展法
 依次遍历所有可能的中心，每次遍历之后记录最长的回文长度，遍历结束，即找到最长回文子串。
 需要注意：偶数长度与奇数长度回文子串的中心位置不同。
+
+# 4  KMP 算法
+[知乎高赞](https://www.zhihu.com/question/21923021/answer/281346746)
+[leetcode kmp教程](https://leetcode-cn.com/leetbook/read/array-and-string/cpoo6/)
+
+# 5  实现strStr()
+使用 KMP 算法实现

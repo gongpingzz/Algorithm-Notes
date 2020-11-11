@@ -37,4 +37,47 @@ public:
         }
         return s.substr(start, end - start + 1);
     }
+
+    /* 实现strStr() */
+    int* bulid_next(string p) {
+        int len = p.size();
+        int i = 0, j = -1;
+        int* next = new int[len];
+        next[0] = -1;
+        while (i < len-1) {
+            if (j < 0 || p[i] == p[j]) {
+                i++;
+                j++;
+                next[i] = j;
+            }
+            else {
+                j = next[j];
+            }
+        }
+        return next;
+    }
+
+    int strStr(string haystack, string needle) {
+        int i = 0, j = 0;
+        int m = haystack.size();
+        int n = needle.size();
+        /* 特判 */
+        if (m <= 0 && n <= 0) return 0;
+        if (m <= 0 && n > 0) return -1;
+        if (m > 0 && n <= 0) return 0;
+        int* next = bulid_next(needle);
+        while (i < m && j < n) {
+            if (j < 0 || haystack[i] == needle[j]) {
+                i++;
+                j++;
+            }
+            else {
+                j = next[j];
+            }
+        }
+        if (j != n) return -1;
+        return i - j;
+    }
+
+
 };
