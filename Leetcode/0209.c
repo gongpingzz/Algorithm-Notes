@@ -1,4 +1,4 @@
-/* 我的解法1 */
+/* 我的解法1，超时了 */
 int minSubArrayLen(int target, int* nums, int numsSize){
     /*
         设最小长度连续子数组为minLen，因为是连续的，这就像一个滑动窗口
