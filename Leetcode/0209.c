@@ -72,6 +72,7 @@ int minSubArrayLen2(int target, int* nums, int numsSize){
             ans = fmin(ans, end - start + 1);
             sum -= nums[start];
             start++;
+            if (ans == 1) return 1;
         }
         end++;
     }
