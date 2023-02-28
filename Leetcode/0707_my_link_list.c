@@ -1,114 +1,84 @@
 #include "common_header.h"
 
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
 typedef struct {
-    int val;
-    struct MyLinkedList* next;
+    struct ListNode *head;
+    int size;
 } MyLinkedList;
 
+struct ListNode *ListNodeCreat(int val) {
+    struct ListNode * node = (struct ListNode *)malloc(sizeof(struct ListNode));
+    node->val = val;
+    node->next = NULL;
+    return node;
+}
 
 MyLinkedList* myLinkedListCreate() {
-    MyLinkedList* tmp = malloc(sizeof(MyLinkedList));
-    if (tmp == NULL) {
-        printf("malloc failed\n");
-        return NULL;
-    }
-    memset(tmp, 0, sizeof(MyLinkedList));
-    return tmp;
+    MyLinkedList * obj = (MyLinkedList *)malloc(sizeof(MyLinkedList));
+    obj->head = ListNodeCreat(0);
+    obj->size = 0;
+    return obj;
 }
 
 int myLinkedListGet(MyLinkedList* obj, int index) {
-    MyLinkedList* curr = obj;
-    while (index) {
-        if (curr->next) {
-            curr = curr->next;
-        }
-        else{
-            return -1;
-        }
-        index--;
+    if (index < 0 || index >= obj->size) {
+        return -1;
     }
-    printf("func=myLinkedListGet: return %d\n", curr->val);
-    return curr->val;
-}
-
-void myLinkedListAddAtHead(MyLinkedList* obj, int val) {
-    MyLinkedList* tmp = myLinkedListCreate();
-    if (tmp == NULL) {
-        printf("create new node failed\n");
-        return;
+    struct ListNode *cur = obj->head;
+    for (int i = 0; i <= index; i++) {
+        cur = cur->next;
     }
-    tmp->next = obj->next;
-    tmp->val = val;
-    obj->next = tmp;
-}
-
-void myLinkedListAddAtTail(MyLinkedList* obj, int val) {
-    MyLinkedList* tmp = obj;
-    while (tmp->next != NULL) {
-        tmp = tmp->next;
-    }
-    MyLinkedList* tmp2 = myLinkedListCreate();
-    tmp2->val = val;
-    tmp->next = tmp2;
+    return cur->val;
 }
 
 void myLinkedListAddAtIndex(MyLinkedList* obj, int index, int val) {
-    MyLinkedList* prev = NULL;
-    MyLinkedList* curr = obj;
-    while (index) {
-        if (curr->next) {
-            prev = curr;
-            curr = curr->next;
-        }
-        else {
-            return;
-        }
-        index--;
+    if (index > obj->size) {
+        return;
     }
-    MyLinkedList* tmp = myLinkedListCreate();
-    tmp->val = val;
-    tmp->next = curr;  
-    prev->next =  tmp;
+    index = MAX(0, index);
+    obj->size++;
+    struct ListNode *pred = obj->head;
+    for (int i = 0; i < index; i++) {
+        pred = pred->next;
+    }
+    struct ListNode *toAdd = ListNodeCreat(val);
+    toAdd->next = pred->next;
+    pred->next = toAdd;
+}
+
+void myLinkedListAddAtHead(MyLinkedList* obj, int val) {
+    myLinkedListAddAtIndex(obj, 0, val);
+}
+
+void myLinkedListAddAtTail(MyLinkedList* obj, int val) {
+    myLinkedListAddAtIndex(obj, obj->size, val);
 }
 
 void myLinkedListDeleteAtIndex(MyLinkedList* obj, int index) {
-    MyLinkedList* prev = NULL;
-    MyLinkedList* curr = obj;
-    while (index) {
-        if (curr->next) {
-            prev = curr;
-            curr = curr->next;
-        }
-        else {
-            return;
-        }
-        index--;
+    if (index < 0 || index >= obj->size) {
+        return;
     }
-    prev->next = curr->next;
-    if (curr) {
-        free(curr);
-        curr = NULL;
+    obj->size--;
+    struct ListNode *pred = obj->head;
+    for (int i = 0; i < index; i++) {
+        pred = pred->next;
     }
+    struct ListNode *p = pred->next;
+    pred->next = pred->next->next;
+    free(p);
 }
 
 void myLinkedListFree(MyLinkedList* obj) {
-    MyLinkedList* tmp = NULL;
-    while (obj) {
-        tmp = obj;
+    struct ListNode *cur = NULL, *tmp = NULL;
+    for (cur = obj->head; cur;) {
+        tmp = cur;
+        cur = cur->next;
         free(tmp);
-        obj = NULL;
-        obj = obj->next;
     }
+    free(obj);
 }
 
-void printLinkedList(MyLinkedList* obj) {
-    while (obj->next) {
-        MyLinkedList* tmp = obj->next;
-        printf("%d -> ", tmp->val);
-        obj = obj->next;
-    }
-    printf("\n");
-}
 
 /**
  * Your MyLinkedList struct will be instantiated and called as such:
